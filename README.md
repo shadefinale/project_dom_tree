@@ -27,7 +27,7 @@ tags: html       attributes:
 <(?<element>\w+)\s*(?<other>.+?)>(?<inner>.*)<\/.*> (same but grabs inside text)
 
 # Capture paired tag, get element type, attributes, inner text/divs
-<(?<element>\w+)\s*(?<attrs>[^>]*)>(?<inner>.*)<\/.*>
+<(?<element>\w+)\s*(?<attrs>[^>]*)>(?<inner>.*)<\/(?<element2>.*)>
 
 # Capture all attrs and return capture groups with str.scan(regex)
 (\S+)=["']?((?:.(?!["']?\s+(?:\S+)=|[>"']))+.)["']?
