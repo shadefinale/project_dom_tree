@@ -50,4 +50,33 @@ class DOMReader
   #     end
   #   end
   # end
+
+
+    # tag = parse_tag("<p class='foo bar' id='baz' name='fozzie'>")
+    # tag[:name] #=> "p"
+    # tag[:classes] #=> ["foo", "bar"]
+    # tag[:id] #=> "baz"
+    # tag[:name] #=> "fozzie"
+
+  def parse_tag(tag) 
+    m = tag.scan(@@start_tag_regex)
+    
+    options = {}
+    m.each do |opt|
+      options[opt[0].to_sym] = opt[1]
+    end
+
+    classes = []
+    if options[:class] 
+      classes = options[:class].split(" ")
+    end
+    id = options[:id] if !(options[:id].nil?)
+    dom_node = DOMNode.new()
+  end
 end
+
+
+
+
+
+
