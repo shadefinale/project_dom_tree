@@ -24,8 +24,18 @@ tags: html       attributes:
 ^<(?<type>\w+)\s*(?<attr>class='(.*?)')\s*(?<attr2>id='(.*?)').*>
 <!-- ^<(?<element>\w+)\s*(class=(?<class>'.+?'))> -->
 <(?<element>\w+)\s*(?<other>.+?)>    
-<(?<element>\w+)\s*(?<other>.+?)>(?<inner>[^<>]*)<\/.*> (same but grabs inside text)
+<(?<element>\w+)\s*(?<other>.+?)>(?<inner>.*)<\/.*> (same but grabs inside text)
 
+# Capture paired tag, get element type, attributes, inner text/divs
+<(?<element>\w+)\s*(?<attrs>[^>]*)>(?<inner>.*)<\/.*>
+
+# Capture all attrs and return capture groups with str.scan(regex)
+(\S+)=["']?((?:.(?!["']?\s+(?:\S+)=|[>"']))+.)["']?
+
+# turning captured attrs into an options hash
+opt_hash = {}
+str.scan(regex).each{|cap| opt_hash[cap[0].to_sym] = cap[1]}
+opt_hash[:thing] = "the thing" or nil if no 'thing' in attrs
 
 
 
