@@ -22,7 +22,7 @@ tags: html       attributes:
 ^<.*>     =  grabs the tags (without text inside tag)
 
 ^<(?<type>\w+)\s*(?<attr>class='(.*?)')\s*(?<attr2>id='(.*?)').*>
-
+^<(?<element>\w+)\s*(class=(?<class>'.+?'))>
 
 
 <p class='foo bar' id='baz' name='fozzie'> hello
