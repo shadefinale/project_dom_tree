@@ -1,5 +1,5 @@
 class DOMNode
-  attr_reader :element,:text,:classes,:id,:children,:parent
+  attr_accessor :element,:text,:classes,:id,:children,:parent
   def initialize(element, classes = [], id = nil, children = [], parent = nil,text = "")
 
     @element = element
@@ -8,5 +8,9 @@ class DOMNode
     @id = id
     @children = children
     @parent = parent
+  end
+
+  def pprint
+    p "Element: #{@element}, Text:#{@text}, Classes:#{@classes}, Id:#{@id}"
   end
 end
