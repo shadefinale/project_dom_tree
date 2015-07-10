@@ -1,7 +1,3 @@
-require_relative './dom.rb'
-require_relative './node.rb'
-require_relative './renderer.rb'
-
 class TreeSearcher
 
   def initialize(tree)
@@ -28,29 +24,21 @@ class TreeSearcher
 
   def search_children(some_node, symbol, input)
     search_by(symbol, input, some_node)
-    
+
   end
 
   def search_ancestor(some_node, symbol, input)
-    results = [] 
-    current_child = some_node
+    results = []
+    current = some_node.parent
+    until current.nil?
+      unless current.send(symbol).nil?
+        results << current if current.send(symbol).include? (input.strip)
+      end
+      current = current.parent
+    end
+    results
   end
 
 end
-
-
-
-dom = DOMReader.new
-dom.build_tree('test.html')
-searcher = TreeSearcher.new(dom)
-
-# results = searcher.search_by(:classes, 'bold')
-reader = NodeRenderer.new(dom)
-results = searcher.search_by(:classes, "top-div")
-reader.render(results[0]) if results[0]
-result_node = results[0]
-results = searcher.search_children(result_node, :classes, "funky")
-reader.render(results[0]) if results[0]
-
 
 

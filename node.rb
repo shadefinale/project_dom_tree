@@ -10,7 +10,9 @@ class DOMNode
     @parent = parent
   end
 
-  def pprint
-    p "Element: #{@element}, Text:#{@text}, Classes:#{@classes}, Id:#{@id}, Parent: #{@parent.element}"
-  end
+  private
+
+    def pprint
+      p "Element: #{@element}, Text:#{@text}, Classes:#{@classes}, Id:#{@id}, Parent: #{@parent.element}"
+    end
 end

@@ -4,12 +4,6 @@ class DOMReader
 
   attr_reader :stack
 
-  @@god_regex = /<(?'type'\w+)\s*?(?<attrs>\S+='.*')?\s*?>(?'inner'.*?)<\/\k'type'>/
-
-  @@start_tag_regex = /<(?<element>\w+)\s*(?<attrs>[^>]*)>/
-  @@end_tag_regex = /<\/[^<>]*>/
-  @@attr_parse_regex = /(\S+)=["']?((?:.(?!["']?\s+(?:\S+)=|[>"']))+.)["']?/
-
   def initialize
     @file = nil
     @root = DOMNode.new("Document")
@@ -28,56 +22,70 @@ class DOMReader
     end
   end
 
-  def parse_opening_tag(tag)
-    new_node = parse_tag(tag)
-    new_node.parent = @stack[-1]
-    @stack[-1].children << new_node
-    @stack[-1].text += tag.pre_match
-    @stack << new_node
-    @file = tag.post_match
-  end
+  private
 
-  def parse_closing_tag(tag)
-    @stack[-1].text += tag.pre_match
-    @stack.pop
-    @file = tag.post_match
-  end
-
-  def get_tag
-    spos = @file =~ (@@start_tag_regex)
-    epos = @file =~ (@@end_tag_regex)
-
-    if spos && epos
-      spos < epos ? (tag = @file.match(@@start_tag_regex)) : (tag = @file.match(@@end_tag_regex))
-    elsif !epos
-      tag = @file.match(@@start_tag_regex)
-    elsif !spos
-      tag = @file.match(@@end_tag_regex)
-    end
-    tag
-  end
-
-  def parse_tag(tag)
-    m = tag
-    element_type = m.captures[0]
-    attrs = m.captures[1..-1]
-    attrs = attrs.join(" ")
-    attrs = attrs.scan(@@attr_parse_regex)
-
-    options = {}
-    attrs.each do |opt|
-      options[opt[0].to_sym] = opt[1]
+    def start_tag_regex
+      /<(?<element>\w+)\s*(?<attrs>[^>]*)>/
     end
 
-    classes = []
-    if options[:class]
-      classes = options[:class].split(" ")
+    def end_tag_regex
+      /<\/[^<>]*>/
     end
-    id = nil
-    id = options[:id] if !(options[:id].nil?)
-    dom_node = DOMNode.new(element_type, classes, id)
-    dom_node
-  end
+
+    def attr_parse_regex
+      /(\S+)=["']?((?:.(?!["']?\s+(?:\S+)=|[>"']))+.)["']?/
+    end
+
+    def parse_opening_tag(tag)
+      new_node = parse_tag(tag)
+      new_node.parent = @stack[-1]
+      @stack[-1].children << new_node
+      @stack[-1].text += tag.pre_match
+      @stack << new_node
+      @file = tag.post_match
+    end
+
+    def parse_closing_tag(tag)
+      @stack[-1].text += tag.pre_match
+      @stack.pop
+      @file = tag.post_match
+    end
+
+    def get_tag
+      spos = @file =~ (start_tag_regex)
+      epos = @file =~ (end_tag_regex)
+
+      if spos && epos
+        spos < epos ? (tag = @file.match(start_tag_regex)) : (tag = @file.match(end_tag_regex))
+      elsif !epos
+        tag = @file.match(start_tag_regex)
+      elsif !spos
+        tag = @file.match(end_tag_regex)
+      end
+      tag
+    end
+
+    def parse_tag(tag)
+      m = tag
+      element_type = m.captures[0]
+      attrs = m.captures[1..-1]
+      attrs = attrs.join(" ")
+      attrs = attrs.scan(attr_parse_regex)
+
+      options = {}
+      attrs.each do |opt|
+        options[opt[0].to_sym] = opt[1]
+      end
+
+      classes = []
+      if options[:class]
+        classes = options[:class].split(" ")
+      end
+      id = nil
+      id = options[:id] if !(options[:id].nil?)
+      dom_node = DOMNode.new(element_type, classes, id)
+      dom_node
+    end
 end
 
 
