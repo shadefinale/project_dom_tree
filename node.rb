@@ -11,6 +11,6 @@ class DOMNode
   end
 
   def pprint
-    p "Element: #{@element}, Text:#{@text}, Classes:#{@classes}, Id:#{@id}"
+    p "Element: #{@element}, Text:#{@text}, Classes:#{@classes}, Id:#{@id}, Parent: #{@parent.element}"
   end
 end
