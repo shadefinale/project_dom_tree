@@ -39,39 +39,27 @@ class DOMReader
     @file[start_point+1..end_point-1] = inner
   end
 
-  # def look_for_elements(inner)
-  #   0.upto(@file.length-1) do |counter|
-  #     if @file[counter].scan(start_tag_regex).length > 0
-  #       depth += 1
-  #       start_element = counter
-  #     elsif @file[counter].scan(end_tag_regex).length > 0
-  #       depth -= 1
-  #       return create_node(start_element, counter) if depth == 0
-  #     end
-  #   end
-  # end
-
-
-    # tag = parse_tag("<p class='foo bar' id='baz' name='fozzie'>")
-    # tag[:name] #=> "p"
-    # tag[:classes] #=> ["foo", "bar"]
-    # tag[:id] #=> "baz"
-    # tag[:name] #=> "fozzie"
-
-  def parse_tag(tag) 
+  def parse_tag(tag)
     m = tag.scan(@@start_tag_regex)
-    
+    element_type = m[0][0]
+    m = m[0]
+    m = m[1..-1] if m.length > 1
+    m = m.join(" ")
+    m = m.scan(@@attr_parse_regex)
+
     options = {}
     m.each do |opt|
       options[opt[0].to_sym] = opt[1]
     end
 
     classes = []
-    if options[:class] 
+    if options[:class]
       classes = options[:class].split(" ")
     end
+    id = nil
     id = options[:id] if !(options[:id].nil?)
-    dom_node = DOMNode.new()
+    dom_node = DOMNode.new(element_type, classes, id)
+    dom_node
   end
 end
 

@@ -1,6 +1,7 @@
 class DOMNode
+  attr_reader :element,:text,:classes,:id,:children,:parent
+  def initialize(element, classes = [], id = nil, children = [], parent = nil,text = "")
 
-  def initialize(element, text = "", classes = [], id = nil, children = [], parent = nil)
     @element = element
     @text = text
     @classes = classes
