@@ -34,15 +34,35 @@ class NodeRenderer
   end
 
   def render_tree
-    ret = ""
+    # ret = ""
+    # stack = [@tree[0].dup]
+    # current = stack.shift
+    # until stack.empty?
+    #   current.children.each do |child|
+    #     stack << child
+    #   end
+    #   current = stack.shift
+    # end
     stack = [@tree[0].dup]
-    current = stack.shift
-    until stack.empty?
-      current.children.each do |child|
-        stack << child
-      end
-      current = stack.shift
-    end
+    p recreate(stack)
   end
+    
+
+    
+  # def recreate(stack) 
+  #   unless stack.empty?
+  #     current = stack.shift
+  #     result = current.element + recreate(stack) + current.element
+  #     current.children.each do |child|
+  #       stack << child
+  #     end
+  #     return result
+  #   else
+  #     return ""
+  #   end
+  end
+
+
+
 
 end
