@@ -6,7 +6,7 @@ class TreeSearcher
 
   def search_by(sym, input, root=nil)
     root.nil? ? search_root = @tree[0] : search_root = root
-     input = force_regex(input.strip)
+     input = force_regex(input)
     results = []
     search_queue = search_root.children.dup
 
@@ -24,9 +24,7 @@ class TreeSearcher
   end
 
   def force_regex(input)
-    input.is_a?(Regexp) ? input : /#{input}/
-
-
+    input.is_a?(Regexp) ? input : /#{input.strip}/
   end
 
   def search_children(some_node, symbol, input)
@@ -36,10 +34,11 @@ class TreeSearcher
 
   def search_ancestor(some_node, symbol, input)
     results = []
+    input = force_regex(input)
     current = some_node.parent
     until current.nil?
       unless current.send(symbol).nil?
-        results << current if current.send(symbol).include? (input.strip)
+        results << current if current.send(symbol) =~ input
       end
       current = current.parent
     end

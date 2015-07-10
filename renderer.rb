@@ -33,4 +33,16 @@ class NodeRenderer
     p "Element: #{spotlight.element}, text: #{spotlight.text}, classes: #{spotlight.classes}, id:#{spotlight.id}"
   end
 
+  def render_tree
+    ret = ""
+    stack = [@tree[0].dup]
+    current = stack.shift
+    until stack.empty?
+      current.children.each do |child|
+        stack << child
+      end
+      current = stack.shift
+    end
+  end
+
 end
