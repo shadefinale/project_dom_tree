@@ -9,10 +9,16 @@ class DOMNode
     @children = children
     @parent = parent
   end
+  
+
+  def classes
+    @classes.join(" ")
+  end
 
   private
 
     def pprint
       p "Element: #{@element}, Text:#{@text}, Classes:#{@classes}, Id:#{@id}, Parent: #{@parent.element}"
     end
+
 end
