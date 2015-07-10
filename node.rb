@@ -10,9 +10,24 @@ class DOMNode
     @parent = parent
   end
 
+  def attrs
+    result = ""
+    result += " class=#{classes}" if @classes.any?
+    result += " id=#{@id}" unless @id.nil?
+
+    result
+  end
 
   def classes
     @classes.join(" ")
+  end
+
+  def left_text
+    @text[0]
+  end
+
+  def right_text
+    @text[1]
   end
 
   def add_before_text(t)

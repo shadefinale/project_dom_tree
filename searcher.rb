@@ -6,7 +6,7 @@ class TreeSearcher
 
   def search_by(sym, input, root=nil)
     root.nil? ? search_root = @tree[0] : search_root = root
-     input = force_regex(input)
+    input = force_regex(input)
     results = []
     search_queue = search_root.children.dup
 

@@ -34,32 +34,60 @@ class NodeRenderer
   end
 
   def render_tree
-    # ret = ""
-    # stack = [@tree[0].dup]
-    # current = stack.shift
-    # until stack.empty?
-    #   current.children.each do |child|
-    #     stack << child
-    #   end
-    #   current = stack.shift
-    # end
-    stack = [@tree[0].dup]
-    p recreate(stack)
+    root = @tree[0].children[0].dup
+    recreate(root, 1)
   end
-    
 
-    
-  # def recreate(stack) 
-  #   unless stack.empty?
-  #     current = stack.shift
-  #     result = current.element + recreate(stack) + current.element
-  #     current.children.each do |child|
-  #       stack << child
-  #     end
-  #     return result
-  #   else
-  #     return ""
-  #   end
+  def recreate(node, spaces)
+    if node.children.any?
+      result = ""
+      node.children.each do |child|
+        result += (" " * spaces * 2) + recreate(child, spaces + 1) + "\n"
+      end
+      return outer(node, result, spaces)
+    else
+      return inner(node, result, spaces)
+    end
+  end
+
+  def outer(node, result, spaces)
+    "<#{node.element}#{node.attrs}>" +
+    "\n" +
+    left_text(node, spaces) +
+    result +
+    right_text(node, spaces) +
+    special_space(spaces * 2) +
+    "</#{node.element}>"
+  end
+
+  def left_text(node, spaces)
+    unless node.left_text.empty?
+      (" " * spaces * 2) + "#{node.left_text}" + "\n"
+    else
+      ""
+    end
+  end
+
+  def right_text(node, spaces)
+    unless node.right_text.empty?
+      (" " * spaces * 2) + "#{node.right_text}" + "\n"
+    else
+      ""
+    end
+  end
+
+  def inner(node, result, spaces)
+    "<#{node.element}#{node.attrs}>" + "\n" +
+    left_text(node, spaces) + right_text(node, spaces) +
+    special_space(spaces * 2)+ "</#{node.element}>"
+  end
+
+  def special_space(spaces)
+    if spaces > 0
+      " " * (spaces - 2)
+    else
+      ""
+    end
   end
 
 

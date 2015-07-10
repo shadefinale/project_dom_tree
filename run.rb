@@ -7,7 +7,7 @@ require_relative './searcher.rb'
 dom = DOMReader.new
 dom.build_tree('test.html')
 reader = NodeRenderer.new(dom)
-reader.render_tree
+puts reader.render_tree
 
 # searcher = TreeSearcher.new(dom)
 
