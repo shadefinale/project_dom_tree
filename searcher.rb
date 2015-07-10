@@ -12,7 +12,7 @@ class TreeSearcher
     root.nil? ? search_root = @tree[0] : search_root = root
 
     results = []
-    search_queue = search_root.children
+    search_queue = search_root.children.dup
     until search_queue.empty?
       current_child = search_queue.shift
       unless current_child.send(sym).nil?
@@ -26,6 +26,16 @@ class TreeSearcher
     results
   end
 
+  def search_children(some_node, symbol, input)
+    search_by(symbol, input, some_node)
+    
+  end
+
+  def search_ancestor(some_node, symbol, input)
+    results = [] 
+    current_child = some_node
+  end
+
 end
 
 
@@ -33,8 +43,14 @@ end
 dom = DOMReader.new
 dom.build_tree('test.html')
 searcher = TreeSearcher.new(dom)
-#results = searcher.search_by(:id, 'main-area')
-results = searcher.search_by(:classes, 'bold')
+
+# results = searcher.search_by(:classes, 'bold')
 reader = NodeRenderer.new(dom)
-reader.render(results[0])
-reader.render(results[0])
+results = searcher.search_by(:classes, "top-div")
+reader.render(results[0]) if results[0]
+result_node = results[0]
+results = searcher.search_children(result_node, :classes, "funky")
+reader.render(results[0]) if results[0]
+
+
+

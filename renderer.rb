@@ -13,7 +13,7 @@ class NodeRenderer
     child_count = 0
     element_count = Hash.new(0)
 
-    child_queue = spotlight.children
+    child_queue = spotlight.children.dup
     until child_queue.empty?
       current_child = child_queue.shift
       child_count += 1
