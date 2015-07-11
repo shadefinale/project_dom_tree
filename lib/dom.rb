@@ -40,13 +40,13 @@ class DOMReader
       new_node = parse_tag(tag)
       new_node.parent = @stack[-1]
       @stack[-1].children << new_node
-      @stack[-1].add_before_text(tag.pre_match)
-      @stack << new_node
+      @stack[-1].before_text += (tag.pre_match)
+      @stack << new_node unless new_node.is_void?
       @file = tag.post_match
     end
 
     def parse_closing_tag(tag)
-      @stack[-1].add_after_text(tag.pre_match)
+      @stack[-1].after_text += tag.pre_match unless @stack[-1].is_void?
       @stack.pop
       @file = tag.post_match
     end

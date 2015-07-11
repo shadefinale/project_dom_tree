@@ -50,6 +50,8 @@ class NodeRenderer
     end
   end
 
+  private
+
   def outer(node, result, spaces)
     "<#{node.element}#{node.attrs}>" +
     "\n" +
@@ -61,25 +63,29 @@ class NodeRenderer
   end
 
   def left_text(node, spaces)
-    unless node.left_text.empty?
-      (" " * spaces * 2) + "#{node.left_text}" + "\n"
+    unless node.before_text.empty?
+      (" " * spaces * 2) + "#{node.before_text}" + "\n"
     else
       ""
     end
   end
 
   def right_text(node, spaces)
-    unless node.right_text.empty?
-      (" " * spaces * 2) + "#{node.right_text}" + "\n"
+    unless node.after_text.empty?
+      (" " * spaces * 2) + "#{node.after_text}" + "\n"
     else
       ""
     end
   end
 
   def inner(node, result, spaces)
-    "<#{node.element}#{node.attrs}>" + "\n" +
+    if node.is_void?
+      return "<#{node.element}#{node.attrs}>"
+    else
+      return "<#{node.element}#{node.attrs}>" + "\n" +
     left_text(node, spaces) + right_text(node, spaces) +
     special_space(spaces * 2)+ "</#{node.element}>"
+    end
   end
 
   def special_space(spaces)

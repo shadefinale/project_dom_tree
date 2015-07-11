@@ -23,10 +23,6 @@ class TreeSearcher
     results
   end
 
-  def force_regex(input)
-    input.is_a?(Regexp) ? input : /#{input.strip}/
-  end
-
   def search_children(some_node, symbol, input)
     search_by(symbol, input, some_node)
 
@@ -44,6 +40,11 @@ class TreeSearcher
     end
     results
   end
+
+  private
+    def force_regex(input)
+      input.is_a?(Regexp) ? input : /#{input.strip}/
+    end
 
 end
 
